@@ -2,7 +2,7 @@
 <html
   lang="en"
   data-ws-project="1c64feef-795d-4d78-b028-78bd30102b12"
-  data-ws-last-published="2026-02-25T02:00:36.361Z"
+  data-ws-last-published="2026-02-25T02:08:02.890Z"
 >
   <head>
     <link
@@ -644,6 +644,149 @@
                     float springForce = (x * SpringStrength) - (relVel *
                     SpringDamper);<br /><br />
                     playerRB.AddForce(rayDir * springForce);<br />
+                    }<br />}<br /></code
+                  ><code
+                    id="test123"
+                    class="w-element c16lr0nj c1uquea1 c10rwu7x c14c6chj cfign57 cu9a6pd c1m5s2q6 cauqto8 c47o47j cw5izhw ci3genr cupq3rr c5kghlv cgs8mtl c1aisgc1 c1mi15vk test123"
+                    >public class MovementAnimationController : MonoBehaviour<br />{<br />
+                    public Animator animator;<br />
+                    public PlayerController controller;<br /><br />
+                    PlayerInputs playerInput;<br />
+                    Vector2 currentMovementInput;<br />
+                    Vector3 currentMovement;<br />
+                    bool isMovementPressed;<br /><br />
+                    private Vector3 forward;<br />
+                    private Vector3 right;<br />
+                    private void Awake()<br />
+                    {<br />
+                    playerInput = new PlayerInputs();<br /><br />
+                    playerInput.Player.Move.started += OnMovementInput;<br />
+                    playerInput.Player.Move.canceled += OnMovementInput;<br />
+                    playerInput.Player.Move.performed += OnMovementInput;<br />
+                    }<br />
+                    private void Start()<br />
+                    {<br />
+                    forward = Camera.main.transform.forward;<br />
+                    forward.y = 0f;<br />
+                    forward = Vector3.Normalize(forward);<br />
+                    right = Quaternion.Euler(new Vector3(0, 90, 0)) *
+                    forward;<br />
+                    }<br /><br />
+                    void OnMovementInput(InputAction.CallbackContext context)<br />
+                    {<br />
+                    currentMovementInput =
+                    context.ReadValue&lt;Vector2&gt;();<br />
+                    currentMovement.x = currentMovementInput.x;<br />
+                    currentMovement.z = currentMovementInput.y;<br />
+                    isMovementPressed = currentMovementInput.x != 0 ||
+                    currentMovementInput.y != 0;<br />
+                    }<br /><br />
+                    private void Update()<br />
+                    {<br />
+                    if (GameManager.Instance.IsPaused)<br />
+                    {<br />
+                    animator.speed = 0f;<br />
+                    return;<br />
+                    }<br />
+                    else<br />
+                    {<br />
+                    animator.speed = 1f;<br />
+                    }<br /><br />
+                    HandleWalkAnimations();<br />
+                    HandleAnimation();<br />
+                    HandleWaterGunAnimation();<br />
+                    }<br /><br />
+                    void HandleWalkAnimations()<br />
+                    {<br />
+                    switch (controller.PlayerMovementType)<br />
+                    {<br />
+                    case MovementType.NewestNewMovement:<br /><br />
+                    float newNewVerticalz = Vector3.Dot(currentMovement,
+                    transform.forward);<br />
+                    float newNewHorizontalx = Vector3.Dot(currentMovement,
+                    transform.right);<br /><br />
+                    animator.SetFloat(&quot;velocityZ&quot;, newNewHorizontalx *
+                    -1, 0.1f, Time.deltaTime);<br />
+                    animator.SetFloat(&quot;velocityX&quot;, newNewVerticalz,
+                    0.1f, Time.deltaTime);<br />
+                    break;<br />
+                    case MovementType.NewMovement:<br /><br />
+                    float newVerticalz = Vector3.Dot(currentMovement,
+                    transform.forward);<br />
+                    float newHorizontalx = Vector3.Dot(currentMovement,
+                    transform.right);<br /><br />
+                    animator.SetFloat(&quot;velocityZ&quot;, newVerticalz, 0.1f,
+                    Time.deltaTime);<br />
+                    animator.SetFloat(&quot;velocityX&quot;, newHorizontalx,
+                    0.1f, Time.deltaTime);<br />
+                    break;<br />
+                    case MovementType.OldMovement:<br /><br />
+                    Vector3 rightMovement = currentMovement.x * right;<br />
+                    Vector3 upMovement = currentMovement.z * forward;<br /><br />
+                    var movement = upMovement + rightMovement;<br /><br />
+                    float verticalz = Vector3.Dot(movement,
+                    transform.forward);<br />
+                    float horizontalx = Vector3.Dot(movement,
+                    transform.right);<br /><br />
+                    animator.SetFloat(&quot;velocityZ&quot;, verticalz, 0.1f,
+                    Time.deltaTime);<br />
+                    animator.SetFloat(&quot;velocityX&quot;, horizontalx, 0.1f,
+                    Time.deltaTime);<br />
+                    break;<br />
+                    }<br />
+                    }<br /><br />
+                    void HandleInteractAnimation(InputAction.CallbackContext
+                    context)<br />
+                    {<br />
+                    if
+                    (animator.GetCurrentAnimatorStateInfo(0).IsName(&quot;Interaction_State&quot;)
+                    &amp;&amp;
+                    animator.GetCurrentAnimatorStateInfo(0).normalizedTime &lt;=
+                    1f)<br />
+                    {<br />
+                    Debug.Log(&quot;animation is running&quot;);<br />
+                    }<br />
+                    else if(!playerInput.Player.Succ.IsPressed() &amp;&amp;
+                    !playerInput.Player.Fire.IsPressed())<br />
+                    {<br />
+                    animator.SetTrigger(&quot;Interacted&quot;);<br />
+                    }<br />
+                    }<br /><br />
+                    void HandleWaterGunAnimation()<br />
+                    {<br />
+                    if (playerInput.Player.Succ.IsPressed() ||
+                    playerInput.Player.Fire.IsPressed())<br />
+                    {<br />
+                    animator.SetBool(&quot;usingWaterGun&quot;, true);<br />
+                    }<br />
+                    else<br />
+                    {<br />
+                    animator.SetBool(&quot;usingWaterGun&quot;, false);<br />
+                    }<br />
+                    }<br /><br />
+                    void HandleAnimation()<br />
+                    {<br />
+                    bool isWalking = animator.GetBool(&quot;isWalking&quot;);<br /><br />
+                    if (isMovementPressed &amp;&amp; !isWalking)<br />
+                    {<br />
+                    animator.SetBool(&quot;isWalking&quot;, true);<br />
+                    // Debug.Log(&quot;player is walking&quot;);<br />
+                    }<br />
+                    else if (!isMovementPressed &amp;&amp; isWalking)<br />
+                    {<br />
+                    animator.SetBool(&quot;isWalking&quot;, false);<br />
+                    // Debug.Log(&quot;player is not walking&quot;);<br />
+                    }<br />
+                    }<br /><br />
+                    private void OnEnable()<br />
+                    {<br />
+                    playerInput.Player.Enable();<br />
+                    playerInput.Player.Interact.performed +=
+                    HandleInteractAnimation;<br /><br />
+                    }<br /><br />
+                    private void OnDisable()<br />
+                    {<br />
+                    playerInput.Player.Disable();<br />
                     }<br />}<br
                   /></code>
                 </div>
@@ -1109,13 +1252,13 @@
       {}
     </script>
     <script
-      src="/assets/entries/entry-server-routing.Ddj0Oqzz.js"
+      src="/assets/entries/entry-server-routing.9mhsogRR.js"
       type="module"
       async
     ></script>
     <link
       rel="modulepreload"
-      href="/assets/entries/pages_slimebotadventure.DWPI8wLx.js"
+      href="/assets/entries/pages_slimebotadventure.iqBgibcH.js"
       as="script"
       type="text/javascript"
     /><link
