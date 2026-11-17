@@ -9,18 +9,15 @@ window.SITE = {
   role: "Game Programmer",
   location: "",
 
-  // Big line at the top of the home page.
-  headline: "Game Programmer working in Unity and Unreal Engine.",
-
   // Short description of yourself (home page). One string per paragraph.
   bio: [
     "I am a Game Programmer, experienced with C# and C++. Worked mainly with Unity and Unreal Engine. Enjoy implementing gameplay, but have dabbled with a bit of everything.",
   ],
 
-  // Portrait shown at the top of the "details" panel. "" hides it.
+  // Portrait shown next to the intro. "" hides it.
   photo: "assets/img/profile.jpg",
 
-  // The small "details" panel next to the intro. Add, remove or rename rows freely.
+  // Short facts listed under the intro. Add, remove or rename rows freely.
   facts: [
     { label: "Engines", value: "Unity, Unreal Engine" },
     { label: "Languages", value: "C#, C++" },
@@ -28,7 +25,7 @@ window.SITE = {
     { label: "Education", value: "Game Programming, Futuregames" },
   ],
 
-  // Shows a status line in the details panel. Set text to "" to hide it.
+  // Optional status line under the facts. Set text to "" to hide it.
   status: { available: true, text: "" },
 
   // Intro text on the "All projects" page.

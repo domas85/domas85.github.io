@@ -202,7 +202,7 @@
     mount.innerHTML =
       '<footer class="site-footer" id="contact"><div class="wrap">' +
       '<div class="footer-main">' +
-      '<div><p class="eyebrow">Contact</p>' +
+      '<div>' +
       '<h2 class="footer-title">' + esc(SITE.contactTitle || "Get in touch") + "</h2>" +
       (SITE.contactText ? '<p class="footer-text">' + esc(SITE.contactText) + "</p>" : "") +
       email +
@@ -244,31 +244,28 @@
       : "";
 
     main.innerHTML =
-      '<section class="hero"><div class="wrap hero-grid">' +
-      '<div class="hero-copy">' +
-      '<p class="eyebrow">' + eyebrow + "</p>" +
-      '<h1 class="hero-title">Hi, I\'m ' + esc(SITE.name) + '. <span class="hero-title-sub">' + esc(SITE.headline) + "</span></h1>" +
-      '<div class="hero-bio">' + bio + "</div>" +
+      '<section class="intro"><div class="wrap intro-grid' + (SITE.photo ? "" : " intro-grid--no-photo") + '">' +
+      (SITE.photo ? '<img class="intro-photo" src="' + esc(SITE.photo) + '" alt="Portrait of ' + esc(SITE.name) + '" decoding="async">' : "") +
+      '<div class="intro-copy">' +
+      '<h1 class="intro-name">' + esc(SITE.name) + "</h1>" +
+      (eyebrow ? '<p class="intro-role">' + eyebrow + "</p>" : "") +
+      '<div class="intro-bio">' + bio + "</div>" +
+      (facts ? '<dl class="facts">' + facts + "</dl>" : "") +
+      status +
       '<div class="btn-row">' +
-      '<a class="btn btn--primary" href="projects.html">View all projects' + icon("arrowRight") + "</a>" +
-      '<a class="btn btn--ghost" href="#contact">Get in touch</a>' +
+      '<a class="btn btn--primary" href="projects.html">View all projects</a>' +
+      '<a class="btn btn--ghost" href="#contact">Contact</a>' +
       resume +
       "</div></div>" +
-      '<aside class="inspector" aria-label="At a glance">' +
-      (SITE.photo ? '<img class="inspector-photo" src="' + esc(SITE.photo) + '" alt="Portrait of ' + esc(SITE.name) + '" decoding="async">' : "") +
-      '<p class="inspector-head"><span aria-hidden="true"></span>details</p>' +
-      '<dl class="inspector-list">' + facts + "</dl>" +
-      status +
-      "</aside>" +
       "</div></section>" +
       '<section class="section"><div class="wrap">' +
       '<div class="section-head">' +
-      '<div><p class="eyebrow">Selected work</p><h2 class="section-title">Highlighted projects</h2></div>' +
+      '<h2 class="section-title">Highlighted projects</h2>' +
       '<a class="link-arrow" href="projects.html">All projects' + icon("arrowRight") + "</a>" +
       "</div>" +
       '<ul class="card-grid card-grid--featured">' + featured.map(cardHtml).join("") + "</ul>" +
       '<div class="section-cta">' +
-      '<a class="btn btn--primary btn--lg" href="projects.html">View all ' + PROJECTS.length + " projects" + icon("arrowRight") + "</a>" +
+      '<a class="btn btn--primary btn--lg" href="projects.html">View all ' + PROJECTS.length + " projects</a>" +
       "</div>" +
       "</div></section>";
 
@@ -288,7 +285,6 @@
 
     main.innerHTML =
       '<section class="section section--top"><div class="wrap">' +
-      '<p class="eyebrow">Portfolio</p>' +
       '<h1 class="page-title">All projects</h1>' +
       (SITE.projectsIntro ? '<p class="page-lead">' + esc(SITE.projectsIntro) + "</p>" : "") +
       '<div class="filters" role="group" aria-label="Filter projects by tag">' +
@@ -332,11 +328,10 @@
   function renderNotFound(title, text) {
     $("#main").innerHTML =
       '<section class="section section--top"><div class="wrap notfound">' +
-      '<p class="eyebrow">Error 404</p>' +
       '<h1 class="page-title">' + esc(title) + "</h1>" +
       '<p class="page-lead">' + esc(text) + "</p>" +
       '<div class="btn-row">' +
-      '<a class="btn btn--primary" href="projects.html">View all projects' + icon("arrowRight") + "</a>" +
+      '<a class="btn btn--primary" href="projects.html">View all projects</a>' +
       '<a class="btn btn--ghost" href="index.html">Back to home</a>' +
       "</div></div></section>";
     document.title = title + " · " + SITE.name;
@@ -478,7 +473,7 @@
       "</header>" +
       media +
       '<div class="project-layout">' +
-      '<aside class="project-aside"><h2 class="aside-title">Details</h2><dl class="inspector-list">' + details + "</dl></aside>" +
+      '<aside class="project-aside"><h2 class="aside-title">Details</h2><dl class="facts">' + details + "</dl></aside>" +
       '<div class="project-body">' +
       (overview ? '<section class="block"><h2>Overview</h2>' + overview + "</section>" : "") +
       contributions +
