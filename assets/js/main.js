@@ -93,6 +93,12 @@
       }
       return '<li><a class="icon-btn" href="' + esc(socialHref(s.key)) + '"' + external + ' aria-label="' + s.label + '" title="' + s.label + '">' + icon(s.key) + "</a></li>";
     });
+    // CV button (footer only): opens the PDF in a new tab.
+    if (options.cv && SITE.resume) {
+      items.push(
+        '<li><a class="social-btn" href="' + esc(SITE.resume) + '" target="_blank" rel="noopener noreferrer">' + icon("file") + "<span>CV</span></a></li>"
+      );
+    }
     return '<ul class="social' + (options.labels ? " social--labels" : "") + '">' + items.join("") + "</ul>";
   }
 
@@ -207,7 +213,7 @@
       (SITE.contactText ? '<p class="footer-text">' + esc(SITE.contactText) + "</p>" : "") +
       email +
       "</div>" +
-      socialList({ email: true, labels: true }) +
+      socialList({ email: true, labels: true, cv: true }) +
       "</div>" +
       '<div class="footer-bottom">' +
       "<p>© " + new Date().getFullYear() + " " + esc(SITE.name) + "</p>" +
@@ -239,9 +245,6 @@
       SITE.status && SITE.status.text
         ? '<p class="status' + (SITE.status.available ? " status--on" : "") + '"><span class="status-dot" aria-hidden="true"></span>' + esc(SITE.status.text) + "</p>"
         : "";
-    var resume = SITE.resume
-      ? '<a class="btn btn--ghost" href="' + esc(SITE.resume) + '" target="_blank" rel="noopener noreferrer">' + icon("file") + "Résumé</a>"
-      : "";
 
     main.innerHTML =
       '<section class="intro"><div class="wrap intro-grid' + (SITE.photo ? "" : " intro-grid--no-photo") + '">' +
@@ -255,7 +258,6 @@
       '<div class="btn-row">' +
       '<a class="btn btn--primary" href="projects.html">View all projects</a>' +
       '<a class="btn btn--ghost" href="#contact">Contact</a>' +
-      resume +
       "</div></div>" +
       "</div></section>" +
       '<section class="section"><div class="wrap">' +

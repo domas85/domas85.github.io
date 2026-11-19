@@ -44,8 +44,8 @@ window.SITE = {
     email: "domasp2002@gmail.com",
   },
 
-  // Optional: path or URL to a CV / résumé PDF, e.g. "assets/cv.pdf". "" hides the button.
-  resume: "",
+  // CV / résumé PDF, opened from the "CV" button in the footer. "" hides the button.
+  resume: "assets/Domas-Prokofjovas-CV.pdf",
 };
 
 /* --------------------------------------------------------------------------
